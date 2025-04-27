@@ -36,6 +36,8 @@ namespace GUI
             dgvDSHD.Columns[3].HeaderText = "Tổng Tiền";
             dgvDSHD.EditMode = DataGridViewEditMode.EditProgrammatically;
         }
+     
+
         private void FrmDonHangBan_Load(object sender, EventArgs e)
         {
             dgvDSHD.DataSource = dbBUS.GetDonHangBan();
@@ -73,7 +75,7 @@ namespace GUI
         {
             int hang = e.RowIndex;
             txtMaDHB.Text = dgvDSHD[0, hang].Value.ToString();
-            cbMaKH.Text = dgvDSHD[1,hang].Value.ToString();
+            cbMaKH.SelectedValue = dgvDSHD[1,hang].Value.ToString();
             dtpNgayBan.Text = dgvDSHD[2,hang].Value.ToString();
             txtTongTien.Text = dgvDSHD[3,hang].Value.ToString();
             txtMaDHB.Enabled = false;
@@ -145,11 +147,13 @@ namespace GUI
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string key = string.Format("{0} like '{1}'", "MaDHB", "*" + txtTimKiem.Text + "*");
+            string key = string.Format("Convert(MaDHB, 'System.String') LIKE '%{0}%'", txtTimKiem.Text.Trim());
             (dgvDSHD.DataSource as DataTable).DefaultView.RowFilter = key;
             DataTable listDHB = new DataTable(); //Khởi tạo 
             listDHB = ctbBUS.TachMa(txtTimKiem.Text);
             dgvChiTietBan.DataSource = listDHB;
+
+           
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
@@ -191,7 +195,7 @@ namespace GUI
             int hang = e.RowIndex;
 
             txtMaCT.Text = dgvChiTietBan[0, hang].Value.ToString();
-            cbMaSP.Text = dgvChiTietBan[2, hang].Value.ToString();
+            cbMaSP.SelectedValue = dgvChiTietBan[2, hang].Value.ToString();
             cbMaDHB.Text = dgvChiTietBan[1, hang].Value.ToString();
             txtDvt.Text = dgvChiTietBan[3, hang].Value.ToString();
             txtSoLuong.Text = dgvChiTietBan[4, hang].Value.ToString();

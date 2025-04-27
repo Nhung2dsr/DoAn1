@@ -166,10 +166,18 @@ namespace GUI
 
         private void đăngXuấtToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            FrmDangNhap dangnhap = new FrmDangNhap();
             this.Hide();
-            dangnhap.ShowDialog();
-            this.Show();
+            FrmDangNhap dangnhap = new FrmDangNhap();
+            if (dangnhap.ShowDialog() == DialogResult.OK)
+            {
+                // Nếu đăng nhập lại thành công, thì mở lại form Main
+                this.Show();
+            }
+            else
+            {
+                // Nếu thoát khỏi form đăng nhập, thì đóng luôn chương trình
+                this.Close();
+            }
         }
     }
 }

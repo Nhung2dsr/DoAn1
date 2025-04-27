@@ -16,7 +16,17 @@ namespace GUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmDangNhap());
+
+            FrmDangNhap dangNhap = new FrmDangNhap();
+
+            if (dangNhap.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new FrmMain()); // Đăng nhập thành công -> mở Main
+            }
+            else
+            {
+                Application.Exit(); // Đăng nhập thất bại hoặc thoát -> đóng app
+            }
         }
     }
 }

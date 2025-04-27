@@ -74,7 +74,7 @@ namespace GUI
         {
             int hang = e.RowIndex;
             txtMaDHN.Text = dgvDSHD[0, hang].Value.ToString();
-            cbMaNCC.Text = dgvDSHD[1, hang].Value.ToString();
+            cbMaNCC.SelectedValue = dgvDSHD[1, hang].Value.ToString();
             dtpNgayNhap.Text = dgvDSHD[2, hang].Value.ToString();
             txtTongTien.Text = dgvDSHD[3, hang].Value.ToString();
             txtMaDHN.Enabled = false;
@@ -114,7 +114,7 @@ namespace GUI
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string key = string.Format("{0} like '{1}'", "MaDHN", "*" + txtTimKiem.Text + "*");
+            string key = string.Format("Convert(MaDHN, 'System.String') LIKE '%{0}%'", txtTimKiem.Text.Trim());
             (dgvDSHD.DataSource as DataTable).DefaultView.RowFilter = key;
         }
 
@@ -191,7 +191,7 @@ namespace GUI
             int hang = e.RowIndex;
 
             txtMaCT.Text = dgvChiTietNhap[0, hang].Value.ToString();
-            cbMaSP.Text = dgvChiTietNhap[2, hang].Value.ToString();
+            cbMaSP.SelectedValue = dgvChiTietNhap[2, hang].Value.ToString();
             cbMaHDN.Text = dgvChiTietNhap[1, hang].Value.ToString();
             txtDvt.Text = dgvChiTietNhap[3, hang].Value.ToString();
             txtSoLuong.Text = dgvChiTietNhap[4, hang].Value.ToString();

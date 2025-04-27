@@ -33,14 +33,14 @@ namespace GUI
 
         private void FrmDangNhap_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult rt = MessageBox.Show("Bạn có muốn thoát không!!", "Hỏi Thoát", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (rt == DialogResult.Yes)
+            // Chỉ hỏi người dùng khi họ chưa đăng nhập thành công
+            if (this.DialogResult != DialogResult.OK)
             {
-                e.Cancel = false;
-            }
-            else
-            {
-                e.Cancel = true;
+                DialogResult rt = MessageBox.Show("Bạn có muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (rt == DialogResult.No)
+                {
+                    e.Cancel = true; // Hủy đóng form
+                }
             }
         }
 
@@ -55,9 +55,7 @@ namespace GUI
             else if (busdn.KiemTraTaiKhoan(tentk, matkhau) == 1)
             {
                 MessageBox.Show("Bạn đã đăng nhập thành công", "Thông báo");
-                this.Hide();
-                FrmMain home = new FrmMain();
-                home.ShowDialog();
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else

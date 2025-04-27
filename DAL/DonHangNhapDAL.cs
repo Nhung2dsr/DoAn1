@@ -18,7 +18,7 @@ namespace DAL
         public DataTable GetDonHangNhap()
         {
             _con.Open();
-            da = new SqlDataAdapter("Select * From DonHangNhap",_con);
+            da = new SqlDataAdapter("Select * From DonHangNhap ORDER BY MaDHN DESC", _con);
             dt = new DataTable();
             da.Fill(dt);
             _con.Close();

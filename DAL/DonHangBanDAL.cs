@@ -17,7 +17,7 @@ namespace DAL
         public DataTable GetDonHangBan()
         {
             _con.Open();
-            da = new SqlDataAdapter ("Select*From DonHangBan ",_con);
+            da = new SqlDataAdapter ("Select*From DonHangBan ORDER BY MaDHB DESC", _con);
             dt = new DataTable ();
             da.Fill (dt);
             _con.Close();
