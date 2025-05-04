@@ -59,12 +59,11 @@ namespace GUI
             txtTenSP.Text = dgvSanPham[1,hang].Value.ToString();
             txtSoLuong.Text = dgvSanPham[2,hang].Value.ToString();
             txtDonvt.Text = dgvSanPham[3,hang].Value.ToString();
-            cbMaLH.Text = dgvSanPham[4, hang].Value.ToString();
-            cbMaNCC.Text = dgvSanPham[5, hang].Value.ToString();
+            cbMaLH.SelectedValue = dgvSanPham[4, hang].Value.ToString();
+            cbMaNCC.SelectedValue = dgvSanPham[5, hang].Value.ToString();
             dtNSX.Text = dgvSanPham[6, hang].Value.ToString();
             dtHSD.Text = dgvSanPham[7, hang].Value.ToString();
-            txtMota.Text = dgvSanPham[8, hang].Value.ToString();
-
+            txtGiaBan.Text = dgvSanPham[8, hang].Value.ToString();
             txtMaSP.Enabled = false;
             btnThem.Enabled = false;
         }
@@ -79,8 +78,8 @@ namespace GUI
             string MaNCC = cbMaNCC.SelectedValue.ToString(); 
             DateTime NSX = DateTime.Parse(dtNSX.Value.ToShortDateString());
             DateTime HSD = DateTime.Parse(dtHSD.Value.ToShortDateString());
-            string mota = txtMota.Text;
-            SanPhamDTO sp = new SanPhamDTO(MaSP,TenSP,SoLuong, Donvt,MaLH, MaNCC,NSX,HSD,mota);
+            float giaBan = float.Parse(txtGiaBan.Text);
+            SanPhamDTO sp = new SanPhamDTO(MaSP,TenSP,SoLuong, Donvt,MaLH, MaNCC,NSX,HSD,giaBan);
             if(spBUS.KiemTraMaTrung(MaSP) == 1)
             {
                 MessageBox.Show("Mã trùng");
@@ -99,15 +98,15 @@ namespace GUI
         {           
                 string ma = txtMaSP.Text;
                 string ten = txtTenSP.Text;
-                string maLH = cbMaLH.Text;
-                string maNCC = cbMaNCC.Text;
+                string maLH = cbMaLH.SelectedValue.ToString();
+                string maNCC = cbMaNCC.SelectedValue.ToString();
                 int sl = int.Parse(txtSoLuong.Text);
                 string dvt = txtDonvt.Text;
                 DateTime NSX = DateTime.Parse(dtNSX.Value.ToShortDateString());
                 DateTime HSD = DateTime.Parse(dtHSD.Value.ToShortDateString());
-                string mota = txtMota.Text;
+                float giaBan = float.Parse(txtGiaBan.Text);
 
-            SanPhamDTO sp = new SanPhamDTO(ma, ten, sl, dvt, maLH, maNCC, NSX, HSD, mota);
+            SanPhamDTO sp = new SanPhamDTO(ma, ten, sl, dvt, maLH, maNCC, NSX, HSD, giaBan);
                 if (spBUS.SuaSP(sp) == true)
                 {
                     MessageBox.Show("Sửa thành công");
@@ -145,14 +144,14 @@ namespace GUI
             txtTimKiem.Text = "";
             dtNSX.Text = "";
             dtHSD.Text = "";
-            txtMota.Text = "";
+            txtGiaBan.Text = "";
             btnThem.Enabled = true;
             txtMaSP.Enabled = true;
             btnLamMoi.Enabled = true;
             dgvSanPham.DataSource = spBUS.GetSanPham ();
         }
 
-        
+       
     }
 
 }

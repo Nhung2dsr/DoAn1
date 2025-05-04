@@ -19,6 +19,10 @@ namespace BUS
         {
             return spDAL.GetSanPham();
         }
+        public DataTable GetThongTinSanPham(string maSP)
+        {
+            return spDAL.GetThongTinSanPham(maSP);
+        }
         public DataTable GetSanPhamSL(string ma)
         {
             return spDAL.GetSanPhamSL(ma);

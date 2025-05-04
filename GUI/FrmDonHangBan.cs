@@ -55,8 +55,6 @@ namespace GUI
             dgvChiTietBan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             txtMaCT.Enabled = false;
             txtSoLuong.Enabled = false;
-            txtDonGia.Enabled = false;
-            txtDvt.Enabled = false;
             LoadDataGridView();
         }
 
@@ -84,9 +82,7 @@ namespace GUI
             dgvChiTietBan.DataSource = listDHB;
             btnThem.Enabled = false;
             txtMaCT.Enabled = true;
-            txtDvt.Enabled = true;
             txtSoLuong.Enabled = true;
-            txtDonGia.Enabled = true;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -205,46 +201,88 @@ namespace GUI
             btnThemCT.Enabled = false;
         }
 
+        private void cbMaSP_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbMaSP.SelectedValue != null)
+            {
+                string maSP = cbMaSP.SelectedValue.ToString();
+                DataTable dt = spBUS.GetThongTinSanPham(maSP);
+                if (dt.Rows.Count > 0)
+                {
+                    txtDvt.Text = dt.Rows[0]["DonViTinh"].ToString();
+                    txtDonGia.Text = dt.Rows[0]["GiaBan"].ToString();
+                }
+            }
+        }
         private void btnThemCT_Click(object sender, EventArgs e)
         {
             string ma = txtMaCT.Text;
             string maSP = cbMaSP.SelectedValue.ToString();
-            string maDHB = cbMaDHB.Text = txtMaDHB.Text;
-            string dvt = txtDvt.Text;
-            int SoLuong = int.Parse(txtSoLuong.Text);
-            float DonGia = float.Parse(txtDonGia.Text);
+            string maDHB = txtMaDHB.Text;
+
+            // Lấy thông tin từ bảng sản phẩm
+            DataTable dt = spBUS.GetThongTinSanPham(maSP);
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Không tìm thấy thông tin sản phẩm!");
+                return;
+            }
+
+            string dvt = dt.Rows[0]["DonViTinh"].ToString();
+            string donGiaText = dt.Rows[0]["GiaBan"].ToString();
+
+            // Cập nhật lên giao diện
+            txtDvt.Text = dvt;
+            txtDonGia.Text = donGiaText;
+
+            // Kiểm tra và xử lý số lượng và đơn giá
+            if (!int.TryParse(txtSoLuong.Text, out int SoLuong))
+            {
+                MessageBox.Show("Số lượng không hợp lệ!");
+                return;
+            }
+
+            if (!float.TryParse(donGiaText, out float DonGia))
+            {
+                MessageBox.Show("Đơn giá không hợp lệ!");
+                return;
+            }
+
             float ThanhTien = SoLuong * DonGia;
-            txtThanhTien.Text = ThanhTien.ToString();   
-            ChiTietDHBDTO ctbDTO = new ChiTietDHBDTO(ma,maSP,maDHB,dvt,SoLuong,DonGia,ThanhTien);
+            txtThanhTien.Text = ThanhTien.ToString();
+
+            // Tạo DTO
+            ChiTietDHBDTO ctbDTO = new ChiTietDHBDTO(ma, maSP, maDHB, dvt, SoLuong, DonGia, ThanhTien);
+
             if (ctbBUS.KiemTraMaTrung(ma) == 1)
             {
-                MessageBox.Show("Mã trùng");
+                MessageBox.Show("Mã chi tiết bị trùng!");
             }
             else
             {
-                if (ctbBUS.ThemCTB(ctbDTO) == true)
+                if (ctbBUS.ThemCTB(ctbDTO))
                 {
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvChiTietBan.DataSource = ctbBUS.GetChiTietBan();
-                    DataTable listDHB = new DataTable(); //Khởi tạo 
-                    listDHB = ctbBUS.GetSpByMaB(txtMaDHB.Text);
-                    dgvChiTietBan.DataSource = listDHB;
-                    int tong = 0;
-                    
-                    for (int i = 0; i < dgvChiTietBan.Rows.Count; ++i)
-                    {
+                    dgvChiTietBan.DataSource = ctbBUS.GetSpByMaB(maDHB);
 
-                        tong += Convert.ToInt32(dgvChiTietBan.Rows[i].Cells[6].Value);
+                    // Tính tổng tiền
+                    int tong = 0;
+                    foreach (DataGridViewRow row in dgvChiTietBan.Rows)
+                    {
+                        if (row.Cells[6].Value != null)
+                        {
+                            tong += Convert.ToInt32(row.Cells[6].Value);
+                        }
                     }
                     txtTongTien.Text = tong.ToString();
+
+                    // Cập nhật lại dòng tổng tiền trong danh sách hóa đơn
                     int rowIndex = dgvDSHD.CurrentCell.RowIndex;
-                    DataGridViewRow selectedRow = dgvDSHD.Rows[rowIndex];
-                    string value = txtTongTien.Text;
-                    selectedRow.Cells[3].Value = value;
+                    dgvDSHD.Rows[rowIndex].Cells[3].Value = txtTongTien.Text;
                 }
             }
 
-       }
+        }
 
         private void btnSuaCT_Click(object sender, EventArgs e)
         {
@@ -341,5 +379,7 @@ namespace GUI
                 MessageBox.Show("Mã hóa đơn nhập không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        
     }
 }

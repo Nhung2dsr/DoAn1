@@ -16,13 +16,13 @@ namespace DTO
         public string MaNCC { get; set; }
         public DateTime NgaySX { get; set; }
         public DateTime HSD { get; set; }
-        public string MoTa {  get; set; }
+        public float GiaBan {  get; set; }
         public string TenLoaiSP { get; set; }
         public SanPhamDTO() 
         { 
 
         }
-        public SanPhamDTO(string ma, string ten, int sl, string dvt, string maLH, string maNCC,DateTime nsx,DateTime hsd,string mota)
+        public SanPhamDTO(string ma, string ten, int sl, string dvt, string maLH, string maNCC,DateTime nsx,DateTime hsd,float GiaBan)
         {
             this.MaSP = ma;
             this.TenSP = ten;
@@ -32,7 +32,7 @@ namespace DTO
             this.MaNCC = maNCC;
             this.NgaySX = nsx;
             this.HSD = hsd;
-            this.MoTa = mota;
+            this.GiaBan = GiaBan;
         }
 
 

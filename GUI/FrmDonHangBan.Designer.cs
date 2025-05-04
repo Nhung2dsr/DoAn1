@@ -371,6 +371,7 @@
             this.cbMaSP.Name = "cbMaSP";
             this.cbMaSP.Size = new System.Drawing.Size(189, 34);
             this.cbMaSP.TabIndex = 7;
+            this.cbMaSP.SelectedIndexChanged += new System.EventHandler(this.cbMaSP_SelectedIndexChanged);
             // 
             // txtThanhTien
             // 
@@ -382,6 +383,7 @@
             // 
             // txtDonGia
             // 
+            this.txtDonGia.Enabled = false;
             this.txtDonGia.Location = new System.Drawing.Point(568, 80);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.Size = new System.Drawing.Size(189, 34);
@@ -396,6 +398,7 @@
             // 
             // txtDvt
             // 
+            this.txtDvt.Enabled = false;
             this.txtDvt.Location = new System.Drawing.Point(209, 152);
             this.txtDvt.Name = "txtDvt";
             this.txtDvt.Size = new System.Drawing.Size(189, 34);

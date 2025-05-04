@@ -32,7 +32,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dtHSD = new System.Windows.Forms.DateTimePicker();
             this.dtNSX = new System.Windows.Forms.DateTimePicker();
-            this.txtMota = new System.Windows.Forms.TextBox();
+            this.txtGiaBan = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
             // 
             this.groupBox1.Controls.Add(this.dtHSD);
             this.groupBox1.Controls.Add(this.dtNSX);
-            this.groupBox1.Controls.Add(this.txtMota);
+            this.groupBox1.Controls.Add(this.txtGiaBan);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label8);
@@ -126,13 +126,13 @@
             this.dtNSX.TabIndex = 30;
             this.dtNSX.Value = new System.DateTime(2025, 4, 22, 23, 28, 36, 0);
             // 
-            // txtMota
+            // txtGiaBan
             // 
-            this.txtMota.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMota.Location = new System.Drawing.Point(803, 252);
-            this.txtMota.Name = "txtMota";
-            this.txtMota.Size = new System.Drawing.Size(443, 34);
-            this.txtMota.TabIndex = 29;
+            this.txtGiaBan.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGiaBan.Location = new System.Drawing.Point(803, 252);
+            this.txtGiaBan.Name = "txtGiaBan";
+            this.txtGiaBan.Size = new System.Drawing.Size(443, 34);
+            this.txtGiaBan.TabIndex = 29;
             // 
             // label11
             // 
@@ -140,9 +140,9 @@
             this.label11.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(663, 260);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(65, 26);
+            this.label11.Size = new System.Drawing.Size(84, 26);
             this.label11.TabIndex = 26;
-            this.label11.Text = "Mô tả";
+            this.label11.Text = "Giá bán";
             // 
             // label10
             // 
@@ -411,7 +411,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtMota;
+        private System.Windows.Forms.TextBox txtGiaBan;
         private System.Windows.Forms.TextBox txtDonvt;
         private System.Windows.Forms.DateTimePicker dtNSX;
         private System.Windows.Forms.DateTimePicker dtHSD;

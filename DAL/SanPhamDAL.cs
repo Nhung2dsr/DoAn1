@@ -26,6 +26,19 @@ namespace DAL
             _con.Close();
             return dt;
         }
+
+        public DataTable GetThongTinSanPham(string maSP)
+        {
+            _con.Open();
+            string sql = "SELECT DonViTinh, GiaBan FROM SanPham WHERE MaSP = @MaSP";
+            SqlCommand cmd = new SqlCommand(sql, _con);
+            cmd.Parameters.AddWithValue("@MaSP", maSP);
+            da = new SqlDataAdapter(cmd);
+            dt = new DataTable();
+            da.Fill(dt);
+            _con.Close();
+            return dt;
+        }
         public DataTable GetSanPhamSL(string ma)
         {
             _con.Open();
@@ -58,7 +71,7 @@ namespace DAL
         //Thêm Sản phẩm
         public bool ThemSP(SanPhamDTO sp)
         {
-            string sql = "Insert into SanPham values('" + sp.MaSP + "',N'" + sp.TenSP + "','" + sp.SoLuong + "',N'" + sp.DonViTinh + "','" + sp.MaLoaiSP + "','" + sp.MaNCC + "','" + sp.NgaySX + "','" + sp.HSD + "',N'" + sp.MoTa + "')";
+            string sql = "Insert into SanPham values('" + sp.MaSP + "',N'" + sp.TenSP + "','" + sp.SoLuong + "',N'" + sp.DonViTinh + "','" + sp.MaLoaiSP + "','" + sp.MaNCC + "','" + sp.NgaySX + "','" + sp.HSD + "','" + sp.GiaBan + "')";
             ThucThiSql(sql);
             return true;
         }
@@ -66,7 +79,7 @@ namespace DAL
         //Sửa Sản phẩm
         public bool SuaSP(SanPhamDTO sp)
         { 
-            string sql = "Update SanPham set TenSP=N'" + sp.TenSP + "', MaLoaiSP='" + sp.MaLoaiSP + "', MaNCC='" + sp.MaNCC + "', SoLuong='" + sp.SoLuong + "', DonViTinh=N'" + sp.DonViTinh + "', NSX = '" + sp.NgaySX + "',HSD = '" + sp.HSD + "', MoTa = N'" + sp.MoTa + "' where MaSP='" + sp.MaSP + "'";
+            string sql = "Update SanPham set TenSP=N'" + sp.TenSP + "', MaLoaiSP='" + sp.MaLoaiSP + "', MaNCC='" + sp.MaNCC + "', SoLuong='" + sp.SoLuong + "', DonViTinh=N'" + sp.DonViTinh + "', NSX = '" + sp.NgaySX + "',HSD = '" + sp.HSD + "', GiaBan = N'" + sp.GiaBan + "' where MaSP='" + sp.MaSP + "'";
             ThucThiSql(sql);
             return true;
         }

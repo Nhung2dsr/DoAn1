@@ -19,7 +19,7 @@ namespace DAL
         public DataTable GetChiTietDHB()
         {
             _con.Open();
-            da = new SqlDataAdapter("Select*From ChiTietDHB", _con);
+            da = new SqlDataAdapter("Select*From ChiTietDHB ", _con);
             dt = new DataTable();
             da.Fill(dt);
             _con.Close();
@@ -55,7 +55,7 @@ namespace DAL
         }
         public bool SuaCTB(ChiTietDHBDTO ctb)
         {
-            string sql = "Update ChiTietDHB set DvTinh=N'" + ctb.DvTinh + "', SoLuong='" + ctb.SoLuong + "', DonGia='" + ctb.DonGia + "', ThanhTien='" + ctb.ThanhTien + "' where MaCTB='" + ctb.MaCTB + "'";
+            string sql = "Update ChiTietDHB set MaSP='" + ctb.MaMH + "', DvTinh=N'" + ctb.DvTinh + "', SoLuong='" + ctb.SoLuong + "', DonGia='" + ctb.DonGia + "', ThanhTien='" + ctb.ThanhTien + "' where MaCTB='" + ctb.MaCTB + "'";
             ThucThiSql(sql);
             return true;
         }
