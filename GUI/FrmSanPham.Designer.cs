@@ -124,7 +124,7 @@
             this.dtNSX.Name = "dtNSX";
             this.dtNSX.Size = new System.Drawing.Size(443, 34);
             this.dtNSX.TabIndex = 30;
-            this.dtNSX.Value = new System.DateTime(2025, 4, 22, 23, 28, 36, 0);
+            this.dtNSX.Value = new System.DateTime(2025, 5, 8, 0, 0, 0, 0);
             // 
             // txtGiaBan
             // 

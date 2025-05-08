@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using DTO;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GUI
 {
@@ -203,44 +204,58 @@ namespace GUI
 
         private void btnThemCT_Click(object sender, EventArgs e)
         {
-            string ma = txtMaCT.Text;
-            string maSP = cbMaSP.SelectedValue.ToString();
-            string maDHN = cbMaHDN.Text = txtMaDHN.Text;
-            string dvt = txtDvt.Text;
-            int SoLuong = int.Parse(txtSoLuong.Text);
-            float dg = float.Parse(txtDonGia.Text);
-            float ThanhTien = SoLuong * dg;
-            txtThanhTien.Text = ThanhTien.ToString();
-
-            ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma, maSP, maDHN, dvt, SoLuong, dg, ThanhTien);
-            if (ctnBUS.KiemTraMaTrung(ma) == 1)
+            try
             {
-                MessageBox.Show("Mã trùng");
-            }
-            else
-            {
-                if (ctnBUS.ThemCTN(ctn) == true)
+                string ma = txtMaCT.Text;
+                string maSP = cbMaSP.SelectedValue.ToString();
+                string maDHN = txtMaDHN.Text.Trim();
+                string dvt = txtDvt.Text;
+                int SoLuong = int.Parse(txtSoLuong.Text);
+                float dg = float.Parse(txtDonGia.Text);
+                float ThanhTien = SoLuong * dg;
+                txtThanhTien.Text = ThanhTien.ToString();
+                // Kiểm tra nếu bất kì ô nào trống
+                if (string.IsNullOrEmpty(dvt) || string.IsNullOrEmpty(txtSoLuong.Text) || string.IsNullOrEmpty(txtDonGia.Text))
                 {
-                    MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvChiTietNhap.DataSource = ctnBUS.GetChiTietNhap();
-                    DataTable listDHN = new DataTable(); //Khởi tạo 
-                    listDHN = ctnBUS.GetSpByMaN(txtMaDHN.Text);
-                    dgvChiTietNhap.DataSource = listDHN;
-                    int tong = 0;
-                    for (int i = 0; i < dgvChiTietNhap.Rows.Count; ++i)
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin trước khi thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }    
+                
+                ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma, maSP, maDHN, dvt, SoLuong, dg, ThanhTien);
+                if (ctnBUS.KiemTraMaTrung(ma) == 1)
+                {
+                    MessageBox.Show("Mã trùng");
+                }
+                else
+                {
+                    if (ctnBUS.ThemCTN(ctn) == true)
                     {
-                        tong += Convert.ToInt32(dgvChiTietNhap.Rows[i].Cells[6].Value);
+                        MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        dgvChiTietNhap.DataSource = ctnBUS.GetChiTietNhap();
+                        DataTable listDHN = new DataTable(); //Khởi tạo 
+                        listDHN = ctnBUS.GetSpByMaN(txtMaDHN.Text);
+                        dgvChiTietNhap.DataSource = listDHN;
+                        int tong = 0;
+                        for (int i = 0; i < dgvChiTietNhap.Rows.Count; ++i)
+                        {
+                            tong += Convert.ToInt32(dgvChiTietNhap.Rows[i].Cells[6].Value);
 
+                        }
+                        txtTongTien.Text = tong.ToString();
+                        int rowIndex = dgvDSHD.CurrentCell.RowIndex;
+                        DataGridViewRow selectedRow = dgvDSHD.Rows[rowIndex];
+                        string value = txtTongTien.Text;
+                        selectedRow.Cells[3].Value = value;
                     }
-                    txtTongTien.Text = tong.ToString();
-                    int rowIndex = dgvDSHD.CurrentCell.RowIndex;
-                    DataGridViewRow selectedRow = dgvDSHD.Rows[rowIndex];
-                    string value = txtTongTien.Text;
-                    selectedRow.Cells[3].Value = value;
                 }
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
+
+
+        }
 
 
         private void btnSuaCTN_Click(object sender, EventArgs e)

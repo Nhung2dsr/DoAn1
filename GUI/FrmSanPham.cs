@@ -70,27 +70,60 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            string MaSP = txtMaSP.Text;
-            string TenSP = txtTenSP.Text;
-            int SoLuong = int.Parse(txtSoLuong.Text);
-            string Donvt = txtDonvt.Text;
-            string MaLH = cbMaLH.SelectedValue.ToString(); 
-            string MaNCC = cbMaNCC.SelectedValue.ToString(); 
-            DateTime NSX = DateTime.Parse(dtNSX.Value.ToShortDateString());
-            DateTime HSD = DateTime.Parse(dtHSD.Value.ToShortDateString());
-            float giaBan = float.Parse(txtGiaBan.Text);
-            SanPhamDTO sp = new SanPhamDTO(MaSP,TenSP,SoLuong, Donvt,MaLH, MaNCC,NSX,HSD,giaBan);
-            if(spBUS.KiemTraMaTrung(MaSP) == 1)
+            try
             {
-                MessageBox.Show("Mã trùng");
-            }
-            else
-            {
-                if (spBUS.ThemSP(sp) == true)
+                string MaSP = txtMaSP.Text;
+                string TenSP = txtTenSP.Text;
+                string Donvt = txtDonvt.Text;
+                string MaLH = cbMaLH.SelectedValue.ToString();
+                string MaNCC = cbMaNCC.SelectedValue.ToString();
+                DateTime NSX = DateTime.Parse(dtNSX.Value.ToShortDateString());
+                DateTime HSD = DateTime.Parse(dtHSD.Value.ToShortDateString());
+                
+                // Kiểm tra nếu bất kỳ ô nào trống
+                if (string.IsNullOrEmpty(MaSP) || string.IsNullOrEmpty(TenSP) || string.IsNullOrEmpty(txtSoLuong.Text) 
+                    || string.IsNullOrEmpty(Donvt) || string.IsNullOrEmpty(txtGiaBan.Text))
                 {
-                    MessageBox.Show("Thêm thành công");
-                    dgvSanPham.DataSource = spBUS.GetSanPham();
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin trước khi thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+                // Kiểm tra kiểu dữ liệu
+                if (!int.TryParse(txtSoLuong.Text, out int SoLuong))
+                {
+                    MessageBox.Show("Số lượng phải là số nguyên!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!float.TryParse(txtGiaBan.Text, out float giaBan))
+                {
+                    MessageBox.Show("Giá bán phải là số thực!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Kiểm tra ngày hết hạn lớn hơn ngày sản xuất
+                if (HSD <= NSX)
+                {
+                    MessageBox.Show("Hạn sử dụng phải lớn hơn ngày sản xuất!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                SanPhamDTO sp = new SanPhamDTO(MaSP, TenSP, SoLuong, Donvt, MaLH, MaNCC, NSX, HSD, giaBan);
+                if (spBUS.KiemTraMaTrung(MaSP) == 1)
+                {
+                    MessageBox.Show("Mã trùng");
+                }
+                else
+                {
+                    if (spBUS.ThemSP(sp) == true)
+                    {
+                        MessageBox.Show("Thêm thành công");
+                        dgvSanPham.DataSource = spBUS.GetSanPham();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

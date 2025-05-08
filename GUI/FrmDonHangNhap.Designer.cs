@@ -205,7 +205,7 @@
             this.dtpNgayNhap.Name = "dtpNgayNhap";
             this.dtpNgayNhap.Size = new System.Drawing.Size(300, 34);
             this.dtpNgayNhap.TabIndex = 7;
-            this.dtpNgayNhap.Value = new System.DateTime(2024, 10, 22, 20, 10, 46, 0);
+            this.dtpNgayNhap.Value = new System.DateTime(2025, 5, 8, 0, 0, 0, 0);
             // 
             // cbMaNCC
             // 

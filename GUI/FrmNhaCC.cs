@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
-
+using System.Text.RegularExpressions;
 namespace GUI
 {
     public partial class FrmNhaCC : Form
@@ -38,34 +38,70 @@ namespace GUI
             btnThem.Enabled = false;
         }
 
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
+        private bool IsValidPhoneNumber(string phone)
+        {
+            return phone.All(char.IsDigit) && phone.Length == 10;
+        }
         private void btnThem_Click(object sender, EventArgs e)
         {
-        
-            string ma = txtMaNCC.Text;
-            string ten = txtTenNCC.Text;
-            string DiaChi = txtDCNhaCC.Text;
-            string Email = txtEmailNCC.Text;
-            string SDT = txtSoDTNhaCC.Text;
-            NhaCCDTO nhaCC = new NhaCCDTO(ma,ten,DiaChi,Email,SDT);
-            if (ccBUS.KiemTraMaTrung(ma) == 1)
+            try
             {
-                MessageBox.Show("Mã trùng");
-            }
-            else
-            { 
-                if(ccBUS.ThemNCC(nhaCC) == true)
-                {
-                    MessageBox.Show("Thêm thành công");
-                    dgvNhaCC.DataSource = ccBUS.GetNhaCC();
-                    txtMaNCC.Text = "";
-                    txtTenNCC.Text = "";
-                    txtDCNhaCC.Text = "";
-                    txtSoDTNhaCC.Text = "";
-                    txtEmailNCC.Text = "";
-                    txtSoDTNhaCC.Text = "";
-                }      
 
+                string ma = txtMaNCC.Text;
+                string ten = txtTenNCC.Text;
+                string DiaChi = txtDCNhaCC.Text;
+                string Email = txtEmailNCC.Text;
+                string SDT = txtSoDTNhaCC.Text;
+                // Kiểm tra nếu bất kỳ ô nào trống
+                if (string.IsNullOrEmpty(ma) || string.IsNullOrEmpty(ten) || string.IsNullOrEmpty(DiaChi)
+                    || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(SDT))
+                {
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin trước khi thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // Kiểm tra email
+                if (!IsValidEmail(Email))
+                {
+                    MessageBox.Show("Email không đúng định dạng!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                // Kiểm tra số điện thoại
+                if (!IsValidPhoneNumber(SDT))
+                {
+                    MessageBox.Show("Số điện thoại phải gồm đúng 10 chữ số!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                NhaCCDTO nhaCC = new NhaCCDTO(ma, ten, DiaChi, Email, SDT);
+                if (ccBUS.KiemTraMaTrung(ma) == 1)
+                {
+                    MessageBox.Show("Mã trùng");
+                }
+                else
+                {
+                    if (ccBUS.ThemNCC(nhaCC) == true)
+                    {
+                        MessageBox.Show("Thêm thành công");
+                        dgvNhaCC.DataSource = ccBUS.GetNhaCC();
+                        txtMaNCC.Text = "";
+                        txtTenNCC.Text = "";
+                        txtDCNhaCC.Text = "";
+                        txtSoDTNhaCC.Text = "";
+                        txtEmailNCC.Text = "";
+                        txtSoDTNhaCC.Text = "";
+                    }
+
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void btnSua_Click(object sender, EventArgs e)

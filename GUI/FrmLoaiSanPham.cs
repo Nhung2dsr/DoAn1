@@ -37,24 +37,38 @@ namespace GUI
         }
         private void btnThem_Click(object sender, EventArgs e)
         {
-            string ma = txtMaLH.Text;
-            string ten = txtTenLH.Text;
-            
-            LoaiSanPhamDTO loaihang = new LoaiSanPhamDTO(ma, ten);
-            if (buslh.KiemTraMaTrung(ma) == 1)
+            try
             {
-                MessageBox.Show("Mã trùng");
-            }
-            else
-            {
-                if (buslh.ThemLoaiSP(loaihang) == true)
+                string ma = txtMaLH.Text;
+                string ten = txtTenLH.Text;
+                // Kiểm tra nếu bất kỳ ô nào trống
+                if (string.IsNullOrEmpty(ma) || string.IsNullOrEmpty(ten))
                 {
-                    MessageBox.Show("Thêm thành công");
-                    dgvLoaiHang.DataSource = buslh.GetLoaiHang();
-                    txtMaLH.Text = "";
-                    txtTenLH.Text = "";
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin trước khi thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                LoaiSanPhamDTO loaihang = new LoaiSanPhamDTO(ma, ten);
+                if (buslh.KiemTraMaTrung(ma) == 1)
+                {
+                    MessageBox.Show("Mã trùng");
+                }
+
+                else
+                {
+                    if (buslh.ThemLoaiSP(loaihang) == true)
+                    {
+                        MessageBox.Show("Thêm thành công");
+                        dgvLoaiHang.DataSource = buslh.GetLoaiHang();
+                        txtMaLH.Text = "";
+                        txtTenLH.Text = "";
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void btnSua_Click_1(object sender, EventArgs e)

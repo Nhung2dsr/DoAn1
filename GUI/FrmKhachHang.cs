@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DTO;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 
 namespace GUI
@@ -40,32 +41,67 @@ namespace GUI
             dgvKH.DataSource = khBUS.GetKhachHang();
             dgvKH.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
-
+        private bool IsValidPhoneNumber(string phone)
+        {
+            return phone.All(char.IsDigit) && phone.Length == 10;
+        }
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
         private void btnThem_Click(object sender, EventArgs e)
         {
-            string ma = txtMaKH.Text;
-            string ten = txtTenKH.Text;
-            string DiaChi = txtDCKH.Text;
-            string Email = txtEmailKH.Text;
-            string SDT = txtSoDTKH.Text;
-            KhachHangDTO KhachHang = new KhachHangDTO(ma,ten,DiaChi,Email,SDT);
-            if (khBUS.KiemTraMaTrung(ma) == 1)
+            try
             {
-                MessageBox.Show("Mã trùng");
-            }    
-            else
-            {
-                if(khBUS.ThemKH(KhachHang) == true)
+                string ma = txtMaKH.Text;
+                string ten = txtTenKH.Text;
+                string DiaChi = txtDCKH.Text;
+                string Email = txtEmailKH.Text;
+                string SDT = txtSoDTKH.Text;
+                // Kiểm tra nếu bất kỳ ô nào trống
+                if (string.IsNullOrEmpty(ma) || string.IsNullOrEmpty(ten) || string.IsNullOrEmpty(DiaChi)
+                    || string.IsNullOrEmpty(SDT))
                 {
-                    MessageBox.Show("Thêm thành công");
-                    dgvKH.DataSource = khBUS.GetKhachHang();
-                    txtMaKH.Text = "";
-                    txtTenKH.Text = "";
-                    txtDCKH.Text = "";
-                    txtEmailKH.Text = "";
-                    txtSoDTKH.Text= "";
-                }    
-            }    
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin trước khi thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // Kiểm tra số điện thoại
+                if (!IsValidPhoneNumber(SDT))
+                {
+                    MessageBox.Show("Số điện thoại phải gồm đúng 10 chữ số!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                // Kiểm tra email
+                if (!IsValidEmail(Email))
+                {
+                    MessageBox.Show("Email không đúng định dạng!", "Lỗi dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                KhachHangDTO KhachHang = new KhachHangDTO(ma, ten, DiaChi, Email, SDT);
+                if (khBUS.KiemTraMaTrung(ma) == 1)
+                {
+                    MessageBox.Show("Mã trùng");
+                }
+                else
+                {
+                    if (khBUS.ThemKH(KhachHang) == true)
+                    {
+                        MessageBox.Show("Thêm thành công");
+                        dgvKH.DataSource = khBUS.GetKhachHang();
+                        txtMaKH.Text = "";
+                        txtTenKH.Text = "";
+                        txtDCKH.Text = "";
+                        txtEmailKH.Text = "";
+                        txtSoDTKH.Text = "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void btnSua_Click(object sender, EventArgs e)
