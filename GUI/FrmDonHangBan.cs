@@ -218,67 +218,39 @@ namespace GUI
         {
             string ma = txtMaCT.Text;
             string maSP = cbMaSP.SelectedValue.ToString();
-            string maDHB = txtMaDHB.Text;
+            int maDHB = int.Parse(cbMaDHB.Text);
+            string dvt = txtDvt.Text;
+            int sol = int.Parse(txtSoLuong.Text);
+            int dong = int.Parse(txtDonGia.Text);
+            int thanht = sol * dong;
+            txtThanhTien.Text = thanht.ToString();
 
-            // Lấy thông tin từ bảng sản phẩm
-            DataTable dt = spBUS.GetThongTinSanPham(maSP);
-            if (dt.Rows.Count == 0)
-            {
-                MessageBox.Show("Không tìm thấy thông tin sản phẩm!");
-                return;
-            }
 
-            string dvt = dt.Rows[0]["DonViTinh"].ToString();
-            string donGiaText = dt.Rows[0]["GiaBan"].ToString();
-
-            // Cập nhật lên giao diện
-            txtDvt.Text = dvt;
-            txtDonGia.Text = donGiaText;
-
-            // Kiểm tra và xử lý số lượng và đơn giá
-            if (!int.TryParse(txtSoLuong.Text, out int SoLuong))
-            {
-                MessageBox.Show("Số lượng không hợp lệ!");
-                return;
-            }
-
-            if (!float.TryParse(donGiaText, out float DonGia))
-            {
-                MessageBox.Show("Đơn giá không hợp lệ!");
-                return;
-            }
-
-            float ThanhTien = SoLuong * DonGia;
-            txtThanhTien.Text = ThanhTien.ToString();
-
-            // Tạo DTO
-            ChiTietDHBDTO ctbDTO = new ChiTietDHBDTO(ma, maSP, maDHB, dvt, SoLuong, DonGia, ThanhTien);
-
+            ChiTietDHBDTO ctb = new ChiTietDHBDTO(ma, maDHB, maSP, dvt, sol, dong, thanht);
             if (ctbBUS.KiemTraMaTrung(ma) == 1)
             {
-                MessageBox.Show("Mã chi tiết bị trùng!");
+                MessageBox.Show("Mã trùng");
             }
             else
             {
-                if (ctbBUS.ThemCTB(ctbDTO))
+                if (dbBUS.ThemCTB(ctb) == true)
                 {
                     MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvChiTietBan.DataSource = ctbBUS.GetSpByMaB(maDHB);
-
-                    // Tính tổng tiền
+                    dgvChiTietBan.DataSource = ctbBUS.GetChiTietBan();
+                    DataTable listDHB = new DataTable(); //Khởi tạo 
+                    listDHB = ctbBUS.GetSpByMaB(txtMaDHB.Text);
+                    dgvChiTietBan.DataSource = listDHB;
                     int tong = 0;
-                    foreach (DataGridViewRow row in dgvChiTietBan.Rows)
+                    for (int i = 0; i < dgvChiTietBan.Rows.Count; ++i)
                     {
-                        if (row.Cells[6].Value != null)
-                        {
-                            tong += Convert.ToInt32(row.Cells[6].Value);
-                        }
+                        tong += Convert.ToInt32(dgvChiTietBan.Rows[i].Cells[6].Value);
+
                     }
                     txtTongTien.Text = tong.ToString();
-
-                    // Cập nhật lại dòng tổng tiền trong danh sách hóa đơn
                     int rowIndex = dgvDSHD.CurrentCell.RowIndex;
-                    dgvDSHD.Rows[rowIndex].Cells[3].Value = txtTongTien.Text;
+                    DataGridViewRow selectedRow = dgvDSHD.Rows[rowIndex];
+                    string value = txtTongTien.Text;
+                    selectedRow.Cells[3].Value = value;
                 }
             }
 
@@ -288,14 +260,14 @@ namespace GUI
         {
             string ma = txtMaCT.Text;
             string maSP = cbMaSP.SelectedValue.ToString();
-            string maDHB = cbMaDHB.Text;
+            int maDHB = int.Parse(cbMaDHB.Text);
             string dvt = txtDvt.Text;
             int SoLuong = int.Parse(txtSoLuong.Text);
             float dg = float.Parse(txtDonGia.Text);
             float ThanhTien = SoLuong * dg;
             txtThanhTien.Text = ThanhTien.ToString();
 
-            ChiTietDHBDTO ctb = new ChiTietDHBDTO(ma, maSP, maDHB, dvt, SoLuong, dg, ThanhTien);
+            ChiTietDHBDTO ctb = new ChiTietDHBDTO(ma, maDHB, maSP, dvt, SoLuong, dg, ThanhTien);
             if (dbBUS.SuaCTB(ctb) == true)
             {
                 MessageBox.Show("Sửa thành công");

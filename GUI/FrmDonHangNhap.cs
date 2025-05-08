@@ -208,7 +208,7 @@ namespace GUI
             {
                 string ma = txtMaCT.Text;
                 string maSP = cbMaSP.SelectedValue.ToString();
-                string maDHN = txtMaDHN.Text.Trim();
+                int maDHN = int.Parse(cbMaHDN.Text);
                 string dvt = txtDvt.Text;
                 int SoLuong = int.Parse(txtSoLuong.Text);
                 float dg = float.Parse(txtDonGia.Text);
@@ -221,10 +221,10 @@ namespace GUI
                     return;
                 }    
                 
-                ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma, maSP, maDHN, dvt, SoLuong, dg, ThanhTien);
+                ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma,maDHN, maSP, dvt, SoLuong, dg, ThanhTien);
                 if (ctnBUS.KiemTraMaTrung(ma) == 1)
                 {
-                    MessageBox.Show("Mã trùng");
+                    MessageBox.Show("Mã chi tiết trùng");
                 }
                 else
                 {
@@ -262,14 +262,14 @@ namespace GUI
         {
             string ma = txtMaCT.Text;
             string maSP = cbMaSP.SelectedValue.ToString();
-            string maDHN = cbMaHDN.Text;
+            int maDHN = int.Parse(cbMaHDN.Text);
             string dvt = txtDvt.Text;
             int SoLuong = int.Parse(txtSoLuong.Text);
             float dg = float.Parse(txtDonGia.Text);
             float ThanhTien = SoLuong * dg;
             txtThanhTien.Text = ThanhTien.ToString();
 
-            ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma, maSP, maDHN, dvt, SoLuong, dg, ThanhTien);
+            ChiTietDHNDTO ctn = new ChiTietDHNDTO(ma, maDHN, maSP, dvt, SoLuong, dg, ThanhTien);
             if (ctnBUS.SuaCTN(ctn) == true)
             {
                 MessageBox.Show("Sửa thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);

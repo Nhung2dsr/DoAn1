@@ -49,13 +49,13 @@ namespace DAL
         //Thêm Chi Tiết Đơn Hàng Bán
         public bool ThemCTB(ChiTietDHBDTO ctb)
         {
-            string sql = "Insert into ChiTietDHB values('" + ctb.MaCTB + "','" + ctb.MaMH + "','" + ctb.MaDHB + "',N'" + ctb.DvTinh + "','" + ctb.SoLuong + "','" + ctb.DonGia + "','" + ctb.ThanhTien + "')";
+            string sql = "Insert into ChiTietDHB values('" + ctb.MaCTB + "','" + ctb.MaDHB + "','" + ctb.MaSP + "',N'" + ctb.DvTinh + "','" + ctb.SoLuong + "','" + ctb.DonGia + "','" + ctb.ThanhTien + "')";
             ThucThiSql(sql);
             return true;
         }
         public bool SuaCTB(ChiTietDHBDTO ctb)
         {
-            string sql = "Update ChiTietDHB set MaSP='" + ctb.MaMH + "', DvTinh=N'" + ctb.DvTinh + "', SoLuong='" + ctb.SoLuong + "', DonGia='" + ctb.DonGia + "', ThanhTien='" + ctb.ThanhTien + "' where MaCTB='" + ctb.MaCTB + "'";
+            string sql = "Update ChiTietDHB set MaSP='" + ctb.MaSP + "', MaDHB='" + ctb.MaDHB + "', DvTinh=N'" + ctb.DvTinh + "', SoLuong='" + ctb.SoLuong + "', DonGia='" + ctb.DonGia + "', ThanhTien='" + ctb.ThanhTien + "' where MaCTB='" + ctb.MaCTB + "'";
             ThucThiSql(sql);
             return true;
         }

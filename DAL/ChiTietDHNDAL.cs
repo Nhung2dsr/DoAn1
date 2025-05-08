@@ -49,22 +49,25 @@ namespace DAL
         //Thêm Chi Tiết Đơn Hàng Nhập
         public bool ThemCTN(ChiTietDHNDTO ctn)
         {
-            string sql = "Insert into ChiTietDHN values('" + ctn.MaCTN + "', '" + ctn.MaMH + "','" + ctn.MaDHN + "',N'" + ctn.DvTinh + "','" + ctn.SoLuong + "','" + ctn.DonGia + "','" + ctn.ThanhTien + "')";
+            string sql = "Insert into ChiTietDHN values('" + ctn.MaCTN + "', '" + ctn.MaSP + "','" + ctn.MaDHN + "',N'" + ctn.DvTinh + "','" + ctn.SoLuong + "','" + ctn.DonGia + "','" + ctn.ThanhTien + "')";
             ThucThiSql(sql);
             return true;
         }
         public bool SuaCTN(ChiTietDHNDTO ctn)
         {
-            string sql = "Update ChiTietDHN set DvTinh=N'" + ctn.DvTinh + "', SoLuong='" + ctn.SoLuong + "', DonGia='" + ctn.DonGia + "', ThanhTien='" + ctn.ThanhTien + "' where MaCTN='" + ctn.MaCTN + "'";
+            string sql = "UPDATE ChiTietDHN SET " +
+             "MaDHN = N'" + ctn.MaDHN + "', " +
+             "MaSP = '" + ctn.MaSP + "', " + 
+             "DvTinh = N'" + ctn.DvTinh + "', " +
+             "SoLuong = " + ctn.SoLuong + ", " +
+             "DonGia = " + ctn.DonGia + ", " +
+             "ThanhTien = " + ctn.ThanhTien + " " +
+             "WHERE MaCTN = '" + ctn.MaCTN + "'";
             ThucThiSql(sql);
             return true;
         }
-        //public bool SuaCTN(ChiTietDHNDTO ctn)
-        //{
-        //    string sql = "Update ChiTietDHN set MaDHN=N'" + ctn.MaDHN + "', MaMH='" + ctn.MaMH + "', DvTinh=N'" + ctn.DvTinh + "',SoLuong='" + ctn.SoLuong + "',DonGia='" + ctn.DonGia + "',ThanhTien ='" + ctn.ThanhTien + "' where MaCTN='" + ctn.MaCTN + "'";
-        //    ThucThiSql(sql);
-        //    return true;
-        //}
+            
+        
         public bool XoaCTN(string ma)
         {
             string sql = "Delete From ChiTietDHN Where MaCTN = '" + ma + "'";

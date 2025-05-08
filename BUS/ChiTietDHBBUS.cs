@@ -37,9 +37,9 @@ namespace BUS
         {
             return ctbDAL.XoaHD(ma);
         }
-        public DataTable GetSpByMaB(string man)
+        public DataTable GetSpByMaB(string mb)
         {
-            return ctbDAL.GetSpByMaB(man);
+            return ctbDAL.GetSpByMaB(mb);
         }
         public DataTable TachMa(string ma)
         {

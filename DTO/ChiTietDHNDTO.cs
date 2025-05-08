@@ -9,8 +9,8 @@ namespace DTO
     public class ChiTietDHNDTO
     {
         public string MaCTN { get; set; }
-        public string MaDHN { get; set; }
-        public string MaMH { get; set; }
+        public int MaDHN { get; set; }
+        public string MaSP { get; set; }
         public string DvTinh { get; set; }
         public int SoLuong { get; set; }
         public float DonGia { get; set; }
@@ -20,11 +20,11 @@ namespace DTO
 
         }
 
-        public ChiTietDHNDTO (string maCT,string MaDHN, string MaMH, string dvt,int sl,float dg,float thanhTien)
+        public ChiTietDHNDTO (string maCT,int MaDHN, string MaSP, string dvt,int sl,float dg,float thanhTien)
         {
             this.MaCTN = maCT;
             this.MaDHN = MaDHN;
-            this.MaMH = MaMH;
+            this.MaSP = MaSP;
             this.DvTinh = dvt;
             this.SoLuong = sl;
             this.DonGia = dg;
